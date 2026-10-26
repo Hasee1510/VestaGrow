@@ -1,5 +1,5 @@
 // ================================
-// FINORA CAPITAL
+
 // script.js
 // ================================
 
@@ -8,16 +8,18 @@
 // AOS Animation
 // -------------------------------
 
-AOS.init({
+//AOS.init({
 
-    duration:1000,
+    //duration:1000,
 
-    once:true,
+    //once:true,
 
-    offset:100
+    //offset:100
 
-});
-
+//});
+if (window.AOS) {
+    AOS.init({ duration: 1000, once: true, offset: 100 });
+}
 
 // -------------------------------
 // Mobile Menu
@@ -32,45 +34,44 @@ menuBtn.addEventListener("click",()=>{
     navLinks.classList.toggle("show");
 
 });
+navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => navLinks.classList.remove("show"));
+});
 
 
 // -------------------------------
 // Counter Animation
 // -------------------------------
 
-const counters=document.querySelectorAll(".count");
+const counters = document.querySelectorAll(".count");
 
-const speed=200;
+const runCounter = (counter) => {
+    const target = +counter.dataset.target;
+    const duration = 1500;
+    const start = performance.now();
 
-counters.forEach(counter=>{
-
-    const animate=()=>{
-
-        const target=+counter.getAttribute("data-target");
-
-        const count=+counter.innerText;
-
-        const increment=target/speed;
-
-        if(count<target){
-
-            counter.innerText=Math.ceil(count+increment);
-
-            setTimeout(animate,10);
-
+    const tick = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        counter.textContent = Math.floor(progress * target);
+        if (progress < 1) {
+            requestAnimationFrame(tick);
+        } else {
+            counter.textContent = target;
         }
-
-        else{
-
-            counter.innerText=target;
-
-        }
-
     };
+    requestAnimationFrame(tick);
+};
 
-    animate();
+const counterObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            runCounter(entry.target);
+            obs.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
 
-});
+counters.forEach(c => counterObserver.observe(c));
 
 
 // -------------------------------
@@ -154,98 +155,98 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
 // Active Navigation Link
 // -------------------------------
 
-const sections=document.querySelectorAll("section");
+// const sections=document.querySelectorAll("section");
 
-const navItems=document.querySelectorAll(".nav-links a");
+// const navItems=document.querySelectorAll(".nav-links a");
 
-window.addEventListener("scroll",()=>{
+// window.addEventListener("scroll",()=>{
 
-    let current="";
+//     let current="";
 
-    sections.forEach(section=>{
+//     sections.forEach(section=>{
 
-        const sectionTop=section.offsetTop-150;
+//         const sectionTop=section.offsetTop-150;
 
-        const sectionHeight=section.clientHeight;
+//         const sectionHeight=section.clientHeight;
 
-        if(pageYOffset>=sectionTop){
+//         if(pageYOffset>=sectionTop){
 
-            current=section.getAttribute("id");
+//             current=section.getAttribute("id");
 
+//         }
+
+//     });
+
+//     navItems.forEach(link=>{
+
+//         link.classList.remove("active");
+
+//         if(link.getAttribute("href")==="#"+current){
+
+//             link.classList.add("active");
+
+//         }
+
+//     });
+
+// });
+const sections = document.querySelectorAll("section[id]");
+const navItems = document.querySelectorAll(".nav-links a");
+
+window.addEventListener("scroll", () => {
+    let current = "";
+    sections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 150) {
+            current = section.id;
         }
-
     });
-
-    navItems.forEach(link=>{
-
-        link.classList.remove("active");
-
-        if(link.getAttribute("href")==="#"+current){
-
-            link.classList.add("active");
-
-        }
-
+    navItems.forEach(link => {
+        link.classList.toggle("active", link.getAttribute("href") === "#" + current);
     });
-
 });
-
 
 // -------------------------------
 // Hero Image Floating Animation
 // -------------------------------
 
-const heroImage=document.querySelector(".hero-image img");
+// const heroImage=document.querySelector(".hero-image img");
 
-let direction=1;
+// let direction=1;
 
-setInterval(()=>{
+// setInterval(()=>{
 
-    heroImage.style.transform=`translateY(${direction*10}px)`;
+//     heroImage.style.transform=`translateY(${direction*10}px)`;
 
-    direction*=-1;
+//     direction*=-1;
 
-},2000);
+// },2000);
 
 
 // -------------------------------
-// Contact Form Demo
-// -------------------------------
 
-const form=document.querySelector("form");
-
-form.addEventListener("submit",(e)=>{
-
-    e.preventDefault();
-
-    alert("Thank you! Your message has been sent successfully.");
-
-    form.reset();
-
-});
 
 
 // -------------------------------
 // Fade-in Cards on Hover
-// -------------------------------
+// // -------------------------------
 
-const cards=document.querySelectorAll(".card");
+// const cards=document.querySelectorAll(".card");
 
-cards.forEach(card=>{
+// cards.forEach(card=>{
 
-    card.addEventListener("mouseenter",()=>{
+//     card.addEventListener("mouseenter",()=>{
 
-        card.style.transform="translateY(-12px) scale(1.03)";
+//         card.style.transform="translateY(-12px) scale(1.03)";
 
-    });
+//     });
 
-    card.addEventListener("mouseleave",()=>{
+//     card.addEventListener("mouseleave",()=>{
 
-        card.style.transform="translateY(0) scale(1)";
+//         card.style.transform="translateY(0) scale(1)";
 
-    });
+//     });
 
-});
+// });
 
 
 // ================================
