@@ -2,8 +2,8 @@
    GOOGLE FONT
 ========================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
+/*@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');*/
+section{scroll-margin-top:80px;}
 /* ==========================
    RESET
 ========================== */
@@ -795,3 +795,27 @@ footer p{
 }
 
 }
+.hero-image img{
+    animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+.card:hover{transform:translateY(-12px) scale(1.03);}
+.nav-links a.active{color:var(--accent);}
+
+.whatsapp-btn{background:#25D366;}
+
+.disclaimer{
+    font-size:13px;
+    max-width:800px;
+    margin:20px auto 0;
+    color:#94a3b8;
+}
+
+@media(max-width:992px){
+    .hero-buttons{justify-content:center;}
+}
+
+.count::after{content:attr(data-suffix);}   
