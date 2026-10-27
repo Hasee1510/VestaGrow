@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WealthGrow Capital |  Building Wealth, Securing Futures.</title>
+    <title>WealthGrow Capital | Disciplined Investing. Lasting Wealth.</title>
     <meta name="description" content="WealthGrow Capital offers investment education and guidance on mutual funds, SIP planning, tax saving and retirement planning. Book a consultation today.">
     <meta name="theme-color" content="#0B1F3A">
     <link rel="canonical" href="https://hasee1510.github.io/VestaGrow/">
     <link rel="icon" href="favicon.png">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="WealthGrow Capital | Building Wealth, Securing Futures.">
+    <meta property="og:title" content="WealthGrow Capital | Disciplined Investing. Lasting Wealth.">
     <meta property="og:description" content="Investment education and wealth-building guidance.">
     <meta property="og:url" content="https://hasee1510.github.io/VestaGrow/">
     <meta property="og:image" content="https://hasee1510.github.io/VestaGrow/preview.jpg">
@@ -59,11 +59,13 @@
 
                     <li><a href="#process">Process</a></li>
 
+                    <li><a href="#learn">Learn</a></li>
+
                     <li><a href="#testimonials">Testimonials</a></li>
 
                     <li><a href="#faq">FAQ</a></li>
 
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#contact" class="nav-cta">Book Consultation</a></li>
 
                 </ul>
 
@@ -85,7 +87,7 @@
 
             <div class="hero-content" data-aos="fade-right">
 
-                <h1>Smart Investing for a Secure Financial Future</h1>
+                <h1>Build Lasting Wealth With Disciplined Investing</h1>
 
                 <p>
                     Empowering individuals to achieve long-term financial
@@ -96,7 +98,7 @@
                 <div class="hero-buttons">
 
                     <a
-                        href="https://wa.me/919946921455"
+                        href="https://wa.me/919443187121"
                         class="btn whatsapp-btn"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -340,6 +342,35 @@
 
     </section>
 
+    <!-- ================= LEARN ================= -->
+
+    <section id="learn" class="learn">
+        <div class="container">
+            <div class="section-title">
+                <h2>Learning Centre</h2>
+                <p>Plain-language guides to help you understand investing before you begin.</p>
+            </div>
+            <div class="learn-grid">
+                <a class="learn-card" href="learn.html#sip">
+                    <h3>What is a SIP and how does it work?</h3>
+                    <p>See how small, regular investments average out the ups and downs of the market.</p>
+                    <span class="read">Read article</span>
+                </a>
+                <a class="learn-card" href="learn.html#emergency-fund">
+                    <h3>Build an emergency fund first</h3>
+                    <p>Why a safety net comes before investing, and how much to set aside.</p>
+                    <span class="read">Read article</span>
+                </a>
+                <a class="learn-card" href="learn.html#risk">
+                    <h3>Understanding risk and diversification</h3>
+                    <p>How risk tolerance, time horizon and diversification shape a sensible portfolio.</p>
+                    <span class="read">Read article</span>
+                </a>
+            </div>
+            <div class="learn-more"><a href="learn.html" class="btn btn-dark">Visit the Learning Centre</a></div>
+        </div>
+    </section>
+
     <!-- ================= FAQ ================= -->
 
     <section id="faq" class="faq">
@@ -366,6 +397,48 @@
                 </div>
             </div>
 
+            <div class="faq-item">
+                <button>What is the minimum amount to start a SIP?</button>
+                <div class="faq-answer">
+                    <p>It depends on the fund. Many schemes allow SIPs from a few hundred rupees a month. We help you pick an amount you can sustain comfortably.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button>Are mutual funds safe?</button>
+                <div class="faq-answer">
+                    <p>Mutual fund investments are subject to market risks, and returns are not guaranteed. Risk varies by fund category, so we help you match funds to your goals and comfort level.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button>Can I stop or change my SIP later?</button>
+                <div class="faq-answer">
+                    <p>Most SIPs can be paused, changed or stopped. Some funds, such as ELSS, have a lock-in period, which we explain before you invest.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button>Do I need KYC to invest?</button>
+                <div class="faq-answer">
+                    <p>Yes. KYC is mandatory for mutual fund investing in India. You will need identity and address proof, and it can usually be completed online.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button>Do you guarantee returns?</button>
+                <div class="faq-answer">
+                    <p>No. Nobody can guarantee investment returns. Our role is education and guidance to help you make informed decisions.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button>How much should I invest?</button>
+                <div class="faq-answer">
+                    <p>It depends on your income, expenses, goals and time horizon. A consultation helps you work out a realistic monthly amount.</p>
+                </div>
+            </div>
+
         </div>
 
     </section>
@@ -385,6 +458,7 @@
             <form
                 action="https://formspree.io/f/moeejgwe"
                 method="POST"
+    id="contactForm"
             >
                 <input
                     type="text"
@@ -420,9 +494,15 @@
                 >
                 <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
 
+                <label class="consent">
+                    <input type="checkbox" name="consent" required>
+                    <span>I agree to be contacted about my enquiry and have read the <a href="policies.html#privacy">Privacy Policy</a>.</span>
+                </label>
+
                 <button type="submit" class="btn">
                     Send Message
                 </button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
             </form>
 
         </div>
@@ -435,11 +515,18 @@
 
         <h3>WealthGrow Capital</h3>
 
-       <p>
-    Building Wealth, Securing Futures.
-</p>
+        <p>
+            Disciplined Investing. Lasting Wealth.
+        </p>
+
         <p>
             © 2026 WealthGrow Capital. All Rights Reserved.
+        </p>
+
+        <p class="footer-links">
+            <a href="learn.html">Learning Centre</a>
+            <a href="policies.html#privacy">Privacy Policy</a>
+            <a href="policies.html#terms">Terms of Use</a>
         </p>
 
         <p class="disclaimer">
@@ -450,6 +537,12 @@
         </p>
 
     </footer>
+
+    <!-- Floating buttons -->
+    <a href="https://wa.me/919443187121" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+    </a>
+    <button class="to-top" aria-label="Back to top"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
 
     <!-- JS -->
 
