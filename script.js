@@ -205,6 +205,58 @@ window.addEventListener("scroll", onScroll, { passive: true });
 onScroll(); // set the correct state on page load
 
 
+// -------------------------------
+// Back-to-top button
+// -------------------------------
+
+const toTop = document.querySelector(".to-top");
+
+if (toTop) {
+    window.addEventListener("scroll", () => {
+        toTop.classList.toggle("show", window.scrollY > 600);
+    }, { passive: true });
+
+    toTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+    });
+}
+
+
+// -------------------------------
+// Contact form (inline success message)
+// -------------------------------
+
+const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
+
+if (contactForm && formStatus) {
+    contactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = contactForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        formStatus.className = "form-status";
+        formStatus.textContent = "Sending...";
+
+        try {
+            const res = await fetch(contactForm.action, {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: { Accept: "application/json" }
+            });
+            if (!res.ok) throw new Error("Request failed");
+            contactForm.reset();
+            formStatus.classList.add("success");
+            formStatus.textContent = "Thank you! Your message has been sent. We will get back to you soon.";
+        } catch (err) {
+            formStatus.classList.add("error");
+            formStatus.textContent = "Sorry, something went wrong. Please try again or message us on WhatsApp.";
+        } finally {
+            btn.disabled = false;
+        }
+    });
+}
+
+
 // ================================
 // END OF FILE
 // ================================
