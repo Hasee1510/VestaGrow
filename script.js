@@ -1,42 +1,72 @@
 // ================================
-
-// script.js
+// WealthGrow Capital - script.js
 // ================================
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 
 // -------------------------------
 // AOS Animation
 // -------------------------------
 
-//AOS.init({
-
-    //duration:1000,
-
-    //once:true,
-
-    //offset:100
-
-//});
-if (window.AOS) {
+if (window.AOS && !prefersReducedMotion) {
     AOS.init({ duration: 1000, once: true, offset: 100 });
+} else {
+    // If AOS is missing or motion is reduced, make sure content stays visible
+    document.querySelectorAll("[data-aos]").forEach(el => el.removeAttribute("data-aos"));
 }
+
 
 // -------------------------------
 // Mobile Menu
 // -------------------------------
 
-const menuBtn=document.querySelector(".menu-btn");
+const menuBtn = document.querySelector(".menu-btn");
+const navLinks = document.querySelector(".nav-links");
 
-const navLinks=document.querySelector(".nav-links");
+if (menuBtn && navLinks) {
+    const menuIcon = menuBtn.querySelector("i");
 
-menuBtn.addEventListener("click",()=>{
+    const setMenu = (open) => {
+        navLinks.classList.toggle("show", open);
+        menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        if (menuIcon) {
+            menuIcon.classList.toggle("fa-bars", !open);
+            menuIcon.classList.toggle("fa-xmark", open);
+        }
+    };
 
-    navLinks.classList.toggle("show");
+    menuBtn.setAttribute("aria-expanded", "false");
 
-});
-navLinks.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => navLinks.classList.remove("show"));
-});
+    menuBtn.addEventListener("click", () => {
+        setMenu(!navLinks.classList.contains("show"));
+    });
+
+    // Keyboard support (Enter / Space)
+    menuBtn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setMenu(!navLinks.classList.contains("show"));
+        }
+    });
+
+    // Close after choosing a link
+    navLinks.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => setMenu(false));
+    });
+
+    // Close with Escape key
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") setMenu(false);
+    });
+
+    // Close when clicking outside the menu
+    document.addEventListener("click", (e) => {
+        if (!navLinks.contains(e.target) && !menuBtn.contains(e.target)) {
+            setMenu(false);
+        }
+    });
+}
 
 
 // -------------------------------
@@ -46,7 +76,13 @@ navLinks.querySelectorAll("a").forEach(link => {
 const counters = document.querySelectorAll(".count");
 
 const runCounter = (counter) => {
-    const target = +counter.dataset.target;
+    const target = Number(counter.dataset.target) || 0;
+
+    if (prefersReducedMotion) {
+        counter.textContent = target;
+        return;
+    }
+
     const duration = 1500;
     const start = performance.now();
 
@@ -62,71 +98,49 @@ const runCounter = (counter) => {
     requestAnimationFrame(tick);
 };
 
-const counterObserver = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            runCounter(entry.target);
-            obs.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.5 });
+if ("IntersectionObserver" in window) {
+    const counterObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                runCounter(entry.target);
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
 
-counters.forEach(c => counterObserver.observe(c));
+    counters.forEach(c => counterObserver.observe(c));
+} else {
+    // Very old browsers: just show final numbers
+    counters.forEach(c => { c.textContent = c.dataset.target; });
+}
 
 
 // -------------------------------
 // FAQ Accordion
 // -------------------------------
 
-const faqItems=document.querySelectorAll(".faq-item");
+const faqItems = document.querySelectorAll(".faq-item");
 
-faqItems.forEach(item=>{
+faqItems.forEach(item => {
+    const button = item.querySelector("button");
+    if (!button) return;
 
-    const button=item.querySelector("button");
+    button.setAttribute("aria-expanded", "false");
 
-    button.addEventListener("click",()=>{
+    button.addEventListener("click", () => {
+        const willOpen = !item.classList.contains("active");
 
-        faqItems.forEach(faq=>{
-
-            if(faq!==item){
-
-                faq.classList.remove("active");
-
-            }
-
+        faqItems.forEach(faq => {
+            faq.classList.remove("active");
+            const b = faq.querySelector("button");
+            if (b) b.setAttribute("aria-expanded", "false");
         });
 
-        item.classList.toggle("active");
-
+        if (willOpen) {
+            item.classList.add("active");
+            button.setAttribute("aria-expanded", "true");
+        }
     });
-
-});
-
-
-// -------------------------------
-// Navbar Shadow on Scroll
-// -------------------------------
-
-const header=document.querySelector(".header");
-
-window.addEventListener("scroll",()=>{
-
-    if(window.scrollY>50){
-
-        header.style.background="#0f172a";
-
-        header.style.boxShadow="0 10px 30px rgba(0,0,0,.15)";
-
-    }
-
-    else{
-
-        header.style.background="rgba(15,23,42,.9)";
-
-        header.style.boxShadow="none";
-
-    }
-
 });
 
 
@@ -134,119 +148,61 @@ window.addEventListener("scroll",()=>{
 // Smooth Scrolling
 // -------------------------------
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+        const id = this.getAttribute("href");
 
-    anchor.addEventListener("click",function(e){
+        // Ignore empty "#" links and ids that don't exist
+        if (!id || id === "#") return;
+        const target = document.querySelector(id);
+        if (!target) return;
 
         e.preventDefault();
-
-        document.querySelector(this.getAttribute("href")).scrollIntoView({
-
-            behavior:"smooth"
-
-        });
-
+        target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
     });
-
 });
 
 
 // -------------------------------
-// Active Navigation Link
+// Scroll Effects (header + active nav link)
 // -------------------------------
 
-// const sections=document.querySelectorAll("section");
-
-// const navItems=document.querySelectorAll(".nav-links a");
-
-// window.addEventListener("scroll",()=>{
-
-//     let current="";
-
-//     sections.forEach(section=>{
-
-//         const sectionTop=section.offsetTop-150;
-
-//         const sectionHeight=section.clientHeight;
-
-//         if(pageYOffset>=sectionTop){
-
-//             current=section.getAttribute("id");
-
-//         }
-
-//     });
-
-//     navItems.forEach(link=>{
-
-//         link.classList.remove("active");
-
-//         if(link.getAttribute("href")==="#"+current){
-
-//             link.classList.add("active");
-
-//         }
-
-//     });
-
-// });
+const header = document.querySelector(".header");
 const sections = document.querySelectorAll("section[id]");
 const navItems = document.querySelectorAll(".nav-links a");
 
-window.addEventListener("scroll", () => {
+const onScroll = () => {
+    // Header background and shadow
+    if (header) {
+        if (window.scrollY > 50) {
+            header.style.background = "#0B1F3A";
+            header.style.boxShadow = "0 10px 30px rgba(0,0,0,.15)";
+        } else {
+            header.style.background = "rgba(11,31,58,.92)";
+            header.style.boxShadow = "none";
+        }
+    }
+
+    // Highlight the current section in the menu
     let current = "";
     sections.forEach(section => {
         if (window.scrollY >= section.offsetTop - 150) {
             current = section.id;
         }
     });
+
+    // At the very bottom of the page, highlight the last section
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2 && sections.length) {
+        current = sections[sections.length - 1].id;
+    }
+
     navItems.forEach(link => {
         link.classList.toggle("active", link.getAttribute("href") === "#" + current);
     });
-});
+};
 
-// -------------------------------
-// Hero Image Floating Animation
-// -------------------------------
-
-// const heroImage=document.querySelector(".hero-image img");
-
-// let direction=1;
-
-// setInterval(()=>{
-
-//     heroImage.style.transform=`translateY(${direction*10}px)`;
-
-//     direction*=-1;
-
-// },2000);
-
-
-// -------------------------------
-
-
-
-// -------------------------------
-// Fade-in Cards on Hover
-// // -------------------------------
-
-// const cards=document.querySelectorAll(".card");
-
-// cards.forEach(card=>{
-
-//     card.addEventListener("mouseenter",()=>{
-
-//         card.style.transform="translateY(-12px) scale(1.03)";
-
-//     });
-
-//     card.addEventListener("mouseleave",()=>{
-
-//         card.style.transform="translateY(0) scale(1)";
-
-//     });
-
-// });
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll(); // set the correct state on page load
 
 
 // ================================
